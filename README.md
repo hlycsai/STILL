@@ -32,17 +32,21 @@ STILL introduces three core innovations to enable efficient and effective LLM li
 We design a **Self-Saliency Score** with strong local–global consistency to estimate token importance using only sliding-window computation. This score quantifies how much a token relies on its self-attention term, enabling reliable selection of salient tokens for SA (high-fidelity modeling) while routing the rest to LA (efficient summarization) — replacing heuristic position-based routing.
 
 Formally, the Self-Saliency Score is computed by comparing sliding-window attention distributions with/without the diagonal (self-attention) term:
+
 $$
 Scoret_t = \sum_{j∈Wt} a^{diag}_{t,j} \log \frac{a^{diag}_{t,j} + ϵ}{a^{nodiag}_{t,j} + ϵ}
 $$
+
 where $W_t$ is the local window index set, $a^{diag}$ and $a^{nodiag}$ are attention distributions with/without self-attention term, and $ϵ$ is a small constant for numerical stability.
 
 #### 2. Norm-Preserved Feature Map (NP-Map)
 
 To preserve pretrained norm statistics, we propose **NP-Map** that decouples feature direction from magnitude and reinjects pretrained norms into linear attention feature maps:
+
 $$
 u = \frac{f(x)}{\|f(x)\|} \|x\|, \quad \phi_{NP}(x) = [\text{softmax}(u) ⊕ \text{softmax}(-u)]
 $$
+
 where $f(·)$ is the learnable MLP in feature maps. NP-Map ensures linear attention aligns with the pretrained model’s representational intensity while satisfying non-negativity constraints.
 
 #### 3. Unified Training-Inference Architecture
