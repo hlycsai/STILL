@@ -74,3 +74,34 @@ STILL achieves state-of-the-art performance on both standard reasoning and long-
 - **Long-Context Tasks**: Recovers 86.2% of full-attention performance on long-context benchmarks (RULER, BABILong) — a regime where existing hybrid baselines largely fail.
 - **Efficiency**: Cuts required training tokens from 1000+B (scratch training) to 0.04B; achieves 45% average memory reduction and 28% decoding speed-up for sequences over 8K tokens.
 
+## ⚙️ Environment
+
+Prepare your Python environment and install all dependencies:
+
+```bash
+# Create and activate conda environment
+conda create -n still python=3.10
+conda activate still
+
+# Install project dependencies
+pip install -r requirements.txt
+pip install flash-attn --no-build-isolation
+```
+
+## 📚 Training
+
+Linearizing pre-trained models involves the following steps:
+
+1. **Prepare Base Model**: Place your model weights (e.g., Llama-3.1-8B) into the `./checkpoints/` directory and rename it to `still_llama31_8B_base`
+
+2. **Modify Configuration**: Edit `./checkpoints/still_llama31_8B_base/config.json` and update the `"architectures"` and `"model_type"` fields to match the linearized architecture
+
+3. **Adjust Training Parameters**: Modify the configuration files under `./configs/` as needed (e.g., `still_at_step1.yaml` or `still_ar_step2.yaml`)
+
+4. **Launch Training**: Execute the corresponding training scripts
+
+   ```bash
+   sh scripts/still_icml_stage1.sh   # Stage 1
+   sh scripts/still_icml_stage2.sh   # Stage 2
+   ```
+
